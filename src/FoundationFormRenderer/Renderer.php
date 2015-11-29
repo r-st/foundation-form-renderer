@@ -18,6 +18,12 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 	protected $requiredLabel = 'Required';
 
 
+	public function __construct()
+	{
+		$this->init();
+	}
+
+
 	/**
 	 * @param string $text
 	 */
@@ -33,18 +39,16 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 	 */
 	protected function init()
 	{
-		parent::init();
-
-		foreach ($this->form->getControls() as $control) {
-			if ($control instanceof \Nette\Forms\Controls\Button) {
-				$control->getControlPrototype()->class = 'button small success radius';
-			}
-		}
+		// foreach ($this->form->getControls() as $control) {
+		// 	if ($control instanceof \Nette\Forms\Controls\Button) {
+		// 		$control->getControlPrototype()->class = 'button small success radius';
+		// 	}
+		// }
 
 		$this->wrappers['controls']['container'] = '';
 		$this->wrappers['label']['container'] = '';
 		$this->wrappers['control']['container'] = '';
-		$this->wrappers['pair']['container'] = 'div class=row "';
+		$this->wrappers['pair']['container'] = 'div class=rows "';
 	}
 
 
@@ -53,9 +57,12 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 	 * @param \Nette\Forms\IControl $control
 	 * @return string
 	 */
-	public function renderErrors(\Nette\Forms\IControl $control = NULL)
+	public function renderErrors(\Nette\Forms\IControl $control = NULL, $own = true)
 	{
-		$errors = $control === NULL ? $this->form->getErrors() : $control->getErrors();
+		$errors = $control
+			? $control->getErrors()
+      : ($own ? $this->form->getOwnErrors() : $this->form->getErrors());
+
 		if (count($errors)) {
 			$wrapper = \Nette\Utils\Html::el('ul class="alert-box alert radius"');
 			$wrapper->addAttributes(array('data-alert' => ''));
