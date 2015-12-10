@@ -17,6 +17,11 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 	 */
 	protected $requiredLabel = 'Required';
 
+	/**
+	 * @var boolean
+	 */
+	protected $hasPrimary = false;
+
 
 	public function __construct()
 	{
@@ -164,6 +169,18 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 			if (!$control instanceof \Nette\Forms\IControl) {
 				throw new \Nette\InvalidArgumentException("Argument must be array of IFormControl instances.");
 			}
+
+			if ($control instanceof \Nette\Forms\Controls\Button) {
+				$class = 'button';
+				if (!($control instanceof \Nette\Forms\Controls\SubmitButton) || $this->hasPrimary) {
+					$class .= ' secondary';
+				} else {
+					$this->hasPrimary = true;
+				}
+
+				$control->getControlPrototype()->addClass($class);
+			}
+
 			$s[] = (string) $control->getControl();
 		}
 
