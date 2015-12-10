@@ -146,7 +146,7 @@ class Renderer extends \Nette\Forms\Rendering\DefaultFormRenderer
 	public function renderControl(\Nette\Forms\IControl $control)
 	{
 		if ($control instanceof \Nette\Forms\Controls\Checkbox) {
-			$html = $control->getLabel();
+			$html = $control->getLabelPrototype();
 			$caption = $html->getText();
 			$html->setHtml((string)$control->getControl() . " " . $caption);
 			return (string)$html;
